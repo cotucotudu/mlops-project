@@ -1,0 +1,7 @@
+model:
+  checkpoint_path: "checkpoints/best-checkpoint.ckpt"
+
+infer:
+  image_path: "data/sample.jpg"
+  top_k: 5
+
