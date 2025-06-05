@@ -1,0 +1,29 @@
+[project]
+name = "plants"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "karpukhina-dr",email = "70887107+karpukhina-dr@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = "^3.12"
+dependencies = [
+    "torch (>=2.7.1,<3.0.0)",
+    "torchvision (>=0.22.1,<0.23.0)",
+    "pytorch-lightning (>=2.5.1.post0,<3.0.0)",
+    "hydra-core (>=1.3.2,<2.0.0)",
+    "mlflow (>=2.22.0,<3.0.0)",
+    "scikit-learn (>=1.6.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
+
