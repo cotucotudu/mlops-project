@@ -6,20 +6,21 @@ from omegaconf import DictConfig
 from plants_classification.data import FlowerDataModule
 from plants_classification.train import FlowerResNet50  # Импорт модели из train.py
 
-@hydra.main(config_path="configs", config_name="infer")
+@hydra.main(version_base = None, config_path="../configs", config_name="infer")
 def main(cfg: DictConfig):
     # Загрузка модели из чекпойнта
-    model = FlowerResNet50.load_from_checkpoint(cfg.model.checkpoint_path)
+    print(cfg)
+    model = FlowerResNet50.load_from_checkpoint(cfg.infer.model.checkpoint_path)
     model.eval()
 
     # Трансформации (те же, что для валидации)
     preprocess = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
+        transforms.Resize(cfg.infer.preprocess.resize),
+        transforms.CenterCrop(cfg.infer.preprocess.crop_size),
         transforms.ToTensor(),
         transforms.Normalize(
-            mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225]
+            mean=cfg.infer.preprocess.mean,
+            std=cfg.infer.preprocess.std
         ),
     ])
 
