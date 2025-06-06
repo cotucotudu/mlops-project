@@ -1,28 +1,32 @@
-import torch
-from torchvision import transforms
-from PIL import Image
 import hydra
+import torch
 from omegaconf import DictConfig
-from plants_classification.data import FlowerDataModule
-from plants_classification.train import FlowerResNet50  # Импорт модели из train.py
+from PIL import Image
+from torchvision import transforms
 
-@hydra.main(version_base = None, config_path="../configs", config_name="infer")
+# from plants_classification.data import FlowerDataModule
+from plants_classification.train import FlowerResNet50  # importing model from train.py
+
+
+@hydra.main(version_base=None, config_path="../configs", config_name="infer")
 def main(cfg: DictConfig):
-    # Загрузка модели из чекпойнта
+    # Loading model from chkpt
     print(cfg)
-    model = FlowerResNet50.load_from_checkpoint(cfg.infer.model.checkpoint_path)
+    checkpoint_path = cfg.infer.model.checkpoint_path
+    model = FlowerResNet50.load_from_checkpoint(checkpoint_path)
     model.eval()
 
-    # Трансформации (те же, что для валидации)
-    preprocess = transforms.Compose([
-        transforms.Resize(cfg.infer.preprocess.resize),
-        transforms.CenterCrop(cfg.infer.preprocess.crop_size),
-        transforms.ToTensor(),
-        transforms.Normalize(
-            mean=cfg.infer.preprocess.mean,
-            std=cfg.infer.preprocess.std
-        ),
-    ])
+    # Same transformations as for val
+    preprocess = transforms.Compose(
+        [
+            transforms.Resize(cfg.infer.preprocess.resize),
+            transforms.CenterCrop(cfg.infer.preprocess.crop_size),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=cfg.infer.preprocess.mean, std=cfg.infer.preprocess.std
+            ),
+        ]
+    )
 
     # Загрузка и предобработка изображения
     img = Image.open(cfg.infer.image_path).convert("RGB")
@@ -42,10 +46,10 @@ def main(cfg: DictConfig):
     top_probs, top_idxs = probs.topk(cfg.infer.top_k)
 
     # Вывод результатов
-    print(f"Топ-{cfg.infer.top_k} предсказаний для изображения {cfg.infer.image_path}:")
+    print(f"Top-{cfg.infer.top_k} preds for {cfg.infer.image_path}: ")
     for prob, idx in zip(top_probs[0], top_idxs[0]):
-        print(f"Класс {idx.item()}: вероятность {prob.item():.4f}")
+        print(f"Class {idx.item()}: probability {prob.item(): .4f}")
+
 
 if __name__ == "__main__":
     main()
-

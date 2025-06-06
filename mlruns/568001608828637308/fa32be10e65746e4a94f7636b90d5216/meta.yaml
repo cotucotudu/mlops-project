@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/568001608828637308/fa32be10e65746e4a94f7636b90d5216/artifacts
+end_time: 1749135966009
+entry_point_name: ""
+experiment_id: "568001608828637308"
+lifecycle_stage: active
+run_id: fa32be10e65746e4a94f7636b90d5216
+run_name: painted-loon-977
+run_uuid: fa32be10e65746e4a94f7636b90d5216
+source_name: ""
+source_type: 4
+source_version: ""
+start_time: 1749134133688
+status: 4
+tags: []
+user_id: daryakarpukhina

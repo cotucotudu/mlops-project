@@ -1,0 +1,5 @@
+outs:
+- md5: 83097ceb9b2e3ad0d2c5a59b6f91dbce
+  size: 107574034
+  hash: md5
+  path: flower-resnet50-epoch=05-val_loss=2.49.ckpt

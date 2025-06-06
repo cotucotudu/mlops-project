@@ -4,4 +4,3 @@ model:
 infer:
   image_path: "data/sample.jpg"
   top_k: 5
-

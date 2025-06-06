@@ -1,6 +1,6 @@
 artifact_location: mlflow-artifacts:/568001608828637308
 creation_time: 1749115612502
-experiment_id: '568001608828637308'
+experiment_id: "568001608828637308"
 last_update_time: 1749115612502
 lifecycle_stage: active
 name: flower_classification

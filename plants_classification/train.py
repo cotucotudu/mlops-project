@@ -1,29 +1,29 @@
 import os
 import subprocess
-import matplotlib.pyplot as plt
-
-import torch
-import torch.nn.functional as F
-from torchvision.models import resnet50, ResNet50_Weights
-
-import pytorch_lightning as pl
-from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint, Callback
-from pytorch_lightning.loggers import MLFlowLogger
-
-from torchmetrics import Accuracy, F1Score
 
 import hydra
+import matplotlib.pyplot as plt
+import mlflow
+import mlflow.pytorch
+import pytorch_lightning as pl
+import torch
+import torch.nn.functional as F
 from omegaconf import DictConfig, OmegaConf
+from pytorch_lightning.callbacks import Callback, EarlyStopping, ModelCheckpoint
+from pytorch_lightning.loggers import MLFlowLogger
+from torchmetrics import Accuracy, F1Score
+from torchvision.models import ResNet50_Weights, resnet50
 
 from plants_classification.data import FlowerDataModule
-
-import mlflow.pytorch
-import mlflow
 
 
 def get_git_commit_hash():
     try:
-        commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('utf-8').strip()
+        commit_hash = (
+            subprocess.check_output(["git", "rev-parse", "HEAD"])
+            .decode("utf-8")
+            .strip()
+        )
     except Exception:
         commit_hash = "unknown"
     return commit_hash
@@ -44,35 +44,35 @@ def save_metrics_plots(metrics_history, plots_dir, epoch):
         metrics_history[key] = metrics_history[key][:length]
 
     plt.figure(figsize=(10, 6))
-    plt.plot(epochs, metrics_history['train_loss'], label='Train Loss')
-    plt.plot(epochs, metrics_history['val_loss'], label='Val Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.title(f'Loss through Epoch {epoch}')
+    plt.plot(epochs, metrics_history["train_loss"], label="Train Loss")
+    plt.plot(epochs, metrics_history["val_loss"], label="Val Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.title(f"Loss through Epoch {epoch}")
     plt.legend()
-    loss_plot_path = os.path.join(plots_dir, f'loss_epoch_{epoch}.png')
+    loss_plot_path = os.path.join(plots_dir, f"loss_epoch_{epoch}.png")
     plt.savefig(loss_plot_path)
     plt.close()
 
     plt.figure(figsize=(10, 6))
-    plt.plot(epochs, metrics_history['train_acc'], label='Train Accuracy')
-    plt.plot(epochs, metrics_history['val_acc'], label='Val Accuracy')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.title(f'Accuracy through Epoch {epoch}')
+    plt.plot(epochs, metrics_history["train_acc"], label="Train Accuracy")
+    plt.plot(epochs, metrics_history["val_acc"], label="Val Accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy")
+    plt.title(f"Accuracy through Epoch {epoch}")
     plt.legend()
-    acc_plot_path = os.path.join(plots_dir, f'accuracy_epoch_{epoch}.png')
+    acc_plot_path = os.path.join(plots_dir, f"accuracy_epoch_{epoch}.png")
     plt.savefig(acc_plot_path)
     plt.close()
 
     plt.figure(figsize=(10, 6))
-    plt.plot(epochs, metrics_history['train_f1'], label='Train F1')
-    plt.plot(epochs, metrics_history['val_f1'], label='Val F1')
-    plt.xlabel('Epoch')
-    plt.ylabel('F1 Score')
-    plt.title(f'F1 Score through Epoch {epoch}')
+    plt.plot(epochs, metrics_history["train_f1"], label="Train F1")
+    plt.plot(epochs, metrics_history["val_f1"], label="Val F1")
+    plt.xlabel("Epoch")
+    plt.ylabel("F1 Score")
+    plt.title(f"F1 Score through Epoch {epoch}")
     plt.legend()
-    f1_plot_path = os.path.join(plots_dir, f'f1_epoch_{epoch}.png')
+    f1_plot_path = os.path.join(plots_dir, f"f1_epoch_{epoch}.png")
     plt.savefig(f1_plot_path)
     plt.close()
 
@@ -89,7 +89,7 @@ class MetricsPlotCallback(Callback):
         if not pl_module.val_loss_history:
             return
         if not pl_module.train_loss_history:
-            return 
+            return
 
         metrics_history = {
             "train_loss": pl_module.train_loss_history,
@@ -102,9 +102,7 @@ class MetricsPlotCallback(Callback):
         print(metrics_history)
 
         plot_paths = save_metrics_plots(
-            metrics_history,
-            self.plots_dir,
-            trainer.current_epoch + 1
+            metrics_history, self.plots_dir, trainer.current_epoch + 1
         )
 
         if mlflow.active_run():
@@ -128,15 +126,20 @@ class FlowerResNet50(pl.LightningModule):
             torch.nn.Linear(self.backbone.fc.in_features, 512),
             torch.nn.ReLU(),
             torch.nn.Dropout(0.2),
-            torch.nn.Linear(512, num_classes)
+            torch.nn.Linear(512, num_classes),
         )
 
         # Отдельные метрики для train и val
-        self.train_accuracy = Accuracy(num_classes=num_classes, task="multiclass")
-        self.train_f1 = F1Score(num_classes=num_classes, average='macro', task="multiclass")
+        m = "multiclass"
+        self.train_accuracy = Accuracy(num_classes=num_classes, task=m)
+        self.train_f1 = F1Score(
+            num_classes=num_classes, average="macro", task="multiclass"
+        )
 
-        self.val_accuracy = Accuracy(num_classes=num_classes, task="multiclass")
-        self.val_f1 = F1Score(num_classes=num_classes, average='macro', task="multiclass")
+        self.val_accuracy = Accuracy(num_classes=num_classes, task=m)
+        self.val_f1 = F1Score(
+            num_classes=num_classes, average="macro", task="multiclass"
+        )
 
         # Накопление метрик по эпохам
         self._train_loss_epoch = []
@@ -167,8 +170,10 @@ class FlowerResNet50(pl.LightningModule):
 
         acc = self.train_accuracy(preds, y)
         f1 = self.train_f1(preds, y)
+        t = True
+        f = False
 
-        self.log("train_loss", loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log("train_loss", loss, prog_bar=t, on_step=f, on_epoch=t)
         self.log("train_acc", acc, prog_bar=True, on_step=False, on_epoch=True)
         self.log("train_f1", f1, prog_bar=True, on_step=False, on_epoch=True)
 
@@ -180,13 +185,19 @@ class FlowerResNet50(pl.LightningModule):
 
     def on_train_epoch_end(self, outputs=None):
         if self._train_loss_epoch:
-            self.train_loss_history.append(sum(self._train_loss_epoch) / len(self._train_loss_epoch))
+            self.train_loss_history.append(
+                sum(self._train_loss_epoch) / len(self._train_loss_epoch)
+            )
             self._train_loss_epoch.clear()
         if self._train_acc_epoch:
-            self.train_acc_history.append(sum(self._train_acc_epoch) / len(self._train_acc_epoch))
+            self.train_acc_history.append(
+                sum(self._train_acc_epoch) / len(self._train_acc_epoch)
+            )
             self._train_acc_epoch.clear()
         if self._train_f1_epoch:
-            self.train_f1_history.append(sum(self._train_f1_epoch) / len(self._train_f1_epoch))
+            self.train_f1_history.append(
+                sum(self._train_f1_epoch) / len(self._train_f1_epoch)
+            )
             self._train_f1_epoch.clear()
 
         self.train_accuracy.reset()
@@ -211,20 +222,27 @@ class FlowerResNet50(pl.LightningModule):
 
     def on_validation_epoch_end(self, outputs=None):
         if self._val_loss_epoch:
-            self.val_loss_history.append(sum(self._val_loss_epoch) / len(self._val_loss_epoch))
+            self.val_loss_history.append(
+                sum(self._val_loss_epoch) / len(self._val_loss_epoch)
+            )
             self._val_loss_epoch.clear()
         if self._val_acc_epoch:
-            self.val_acc_history.append(sum(self._val_acc_epoch) / len(self._val_acc_epoch))
+            self.val_acc_history.append(
+                sum(self._val_acc_epoch) / len(self._val_acc_epoch)
+            )
             self._val_acc_epoch.clear()
         if self._val_f1_epoch:
-            self.val_f1_history.append(sum(self._val_f1_epoch) / len(self._val_f1_epoch))
+            self.val_f1_history.append(
+                sum(self._val_f1_epoch) / len(self._val_f1_epoch)
+            )
             self._val_f1_epoch.clear()
 
         self.val_accuracy.reset()
         self.val_f1.reset()
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+        lr = self.hparams.learning_rate
+        return torch.optim.Adam(self.parameters(), lr=lr)
 
 
 @hydra.main(version_base=None, config_path="../configs", config_name="train")
@@ -233,16 +251,14 @@ def main(cfg: DictConfig):
 
     mlflow_logger = MLFlowLogger(
         experiment_name=cfg.logging.experiment_name,
-        tracking_uri=cfg.logging.mlflow_tracking_uri
+        tracking_uri=cfg.logging.mlflow_tracking_uri,
     )
 
     os.makedirs(cfg.logging.plots_dir, exist_ok=True)
 
     mlflow_logger.log_hyperparams(cfg_dict)
     mlflow_logger.experiment.log_param(
-        mlflow_logger.run_id,
-        "git_commit",
-        get_git_commit_hash()
+        mlflow_logger.run_id, "git_commit", get_git_commit_hash()
     )
 
     datamodule = FlowerDataModule(
@@ -250,31 +266,25 @@ def main(cfg: DictConfig):
         batch_size=cfg.data.batch_size,
         num_workers=cfg.data.num_workers,
         resize=cfg.data.resize,
-        crop_size=cfg.data.crop_size
+        crop_size=cfg.data.crop_size,
     )
     datamodule.setup()
 
     model = FlowerResNet50(
         num_classes=cfg.model.num_classes,
         learning_rate=cfg.model.learning_rate,
-        freeze_backbone=cfg.model.freeze_backbone
+        freeze_backbone=cfg.model.freeze_backbone,
     )
 
     checkpoint_cb = ModelCheckpoint(
         dirpath=cfg.training.checkpoint_dir,
         monitor="val_loss",
-        filename="best-{epoch}-{val_loss:.2f}"
+        filename="best-{epoch}-{val_loss:.2f}",
     )
 
-    early_stop_cb = EarlyStopping(
-        monitor="val_loss",
-        patience=5,
-        mode="min"
-    )
+    early_stop_cb = EarlyStopping(monitor="val_loss", patience=5, mode="min")
 
-    plot_cb = MetricsPlotCallback(
-        plots_dir=cfg.logging.plots_dir
-    )
+    plot_cb = MetricsPlotCallback(plots_dir=cfg.logging.plots_dir)
 
     trainer = pl.Trainer(
         max_epochs=cfg.training.max_epochs,
@@ -283,7 +293,7 @@ def main(cfg: DictConfig):
         accelerator=cfg.training.accelerator,
         devices=cfg.training.devices,
         enable_progress_bar=True,
-        log_every_n_steps=10
+        log_every_n_steps=10,
     )
 
     trainer.fit(model, datamodule=datamodule)
@@ -291,7 +301,7 @@ def main(cfg: DictConfig):
     mlflow.pytorch.log_model(
         pytorch_model=model,
         artifact_path="final_model",
-        registered_model_name="FlowerClassifier"
+        registered_model_name="FlowerClassifier",
     )
 
 
