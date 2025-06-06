@@ -2,6 +2,8 @@ data:
   data_dir: "../data"
   batch_size: 32
   num_workers: 4
+  resize: 256 
+  crop_size: 224
 
 model:
   num_classes: 102
@@ -16,5 +18,5 @@ training:
 
 logging:
   experiment_name: "flower_classification"
-  tracking_uri: "http://127.0.0.1:5000"  # Адрес MLflow сервера
-
+  mlflow_tracking_uri: "http://127.0.0.1:8080"  # Адрес MLflow сервера
+  plots_dir: "../plots"
