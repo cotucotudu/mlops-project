@@ -54,13 +54,13 @@ class FlowerDataModule(pl.LightningDataModule):
             self.test_dataset = Flowers102(root=self.data_dir, split='test', transform=self.val_test_transforms, download=False)
 
         def train_dataloader(self):
-            return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers)
+            return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers, persistent_workers=True)
 
         def val_dataloader(self):
-            return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers)
+            return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers, persistent_workers=True)
 
         def test_dataloader(self):
-            return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers)
+            return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers, persistent_workers=True)
 
 @hydra.main(version_base=None,config_path="../configs", config_name="data")
 def main(cfg: DictConfig):
