@@ -1,4 +1,4 @@
-# Plant Classification Project
+# Oxford Flowers Classification Project
 
 ## Project Overview
 
@@ -54,14 +54,13 @@ Link: [https://docs.pytorch.org/vision/main/models/generated/torchvision.models.
 
 - Python 3.12
 - Poetry for dependency management
-- CUDA (optional, for GPU acceleration)
 
 ### Installation
 
 1. Clone the repository:
 ```
-git clone https://github.com/cotucotudu/mlops-project
-cd mlops-project
+git clone https://github.com/cotucotudu/oxford-flowers-classification
+cd oxford-flowers-classification
 ```
 
 2. Install dependencies using Poetry:
