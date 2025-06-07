@@ -6,7 +6,7 @@ authors = [
     {name = "karpukhina-dr",email = "karpukhina.dr@phystech.edu"}
 ]
 readme = "README.md"
-requires-python = "3.12.3"
+requires-python = "3.12"
 dependencies = [
     "torch (>=2.2.2, <2.3)",
     "torchvision (>=0.17.2,<0.18.0)",
@@ -24,7 +24,7 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = "3.12.3"
+python = "3.12"
 torch = "*"
 torchvision = "*"
 torchaudio = "*"
