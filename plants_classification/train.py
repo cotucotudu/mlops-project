@@ -280,6 +280,7 @@ def main(cfg: DictConfig):
         dirpath=cfg.training.checkpoint_dir,
         monitor="val_loss",
         filename="best-{epoch}",
+        save_top_k=-1
     )
 
     early_stop_cb = EarlyStopping(monitor="val_loss", patience=5, mode="min")
