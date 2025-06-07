@@ -15,7 +15,8 @@ dependencies = [
     "mlflow (>=2.22.0,<3.0.0)",
     "scikit-learn (>=1.6.1,<2.0.0)",
     "numpy (<2)",
-    "pre-commit (>=4.2.0,<5.0.0)"
+    "pre-commit (>=4.2.0,<5.0.0)",
+    "onnx (>=1.18.0,<2.0.0)"
 ]
 
 

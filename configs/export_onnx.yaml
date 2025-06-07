@@ -1,0 +1,8 @@
+model:
+  learning_rate: 0.0005
+  freeze_backbone: true
+  num_classes: 102
+  checkpoint_path: "checkpoints/best-epoch=1.ckpt"
+  img_size: 300
+  onnx_output: "model.onnx"
+
