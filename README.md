@@ -56,6 +56,14 @@ Link: [https://docs.pytorch.org/vision/main/models/generated/torchvision.models.
 - Poetry for dependency management
 
 ### Installation
+0. Install pyenv if missing, install Python 3.12.3, install poetry if missing:
+```
+command -v pyenv >/dev/null 2>&1 || (curl https://pyenv.run | bash && export PATH="$HOME/.pyenv/bin:$PATH" && eval "$(pyenv init --path)" && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"); \
+export PATH="$HOME/.pyenv/bin:$PATH"; eval "$(pyenv init --path)"; eval "$(pyenv init -)"; eval "$(pyenv virtualenv-init -)"; \
+pyenv install -s 3.12.3; pyenv local 3.12.3; \
+command -v poetry >/dev/null 2>&1 || (curl -sSL https://install.python-poetry.org | python3 - && export PATH="$HOME/.local/bin:$PATH"); \
+export PATH="$HOME/.local/bin:$PATH"; \
+```
 
 1. Clone the repository:
 ```
