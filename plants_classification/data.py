@@ -59,19 +59,19 @@ class FlowerDataModule(pl.LightningDataModule):
             root=self.data_dir,
             split="train",
             transform=self.train_transforms,
-            download=False,
+            download=True,
         )
         self.val_dataset = Flowers102(
             root=self.data_dir,
             split="val",
             transform=self.val_test_transforms,
-            download=False,
+            download=True,
         )
         self.test_dataset = Flowers102(
             root=self.data_dir,
             split="test",
             transform=self.val_test_transforms,
-            download=False,
+            download=True,
         )
 
     def train_dataloader(self):
