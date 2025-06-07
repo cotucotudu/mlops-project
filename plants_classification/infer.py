@@ -36,11 +36,11 @@ def main(cfg: DictConfig):
     model.to(device)
     input_tensor = input_tensor.to(device)
 
-    with torch.no_grad(): #INference
+    with torch.no_grad():  # INference
         logits = model(input_tensor)
         probs = torch.nn.functional.softmax(logits, dim=1)
 
-    top_probs, top_idxs = probs.topk(cfg.infer.top_k) #top-k preds
+    top_probs, top_idxs = probs.topk(cfg.infer.top_k)  # top-k preds
     print(f"Top-{cfg.infer.top_k} preds for {cfg.infer.image_path}: ")
     for prob, idx in zip(top_probs[0], top_idxs[0]):
         print(f"Class {idx.item()}: probability {prob.item(): .4f}")

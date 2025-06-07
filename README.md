@@ -15,9 +15,10 @@ This project focuses on classifying plants based on their photographs. It uses t
       'label': ClassLabel(shape=(), dtype=int64, num_classes=102)
     })
     ```
-  - Input data: ``` Image(shape=(None,None,3), dtype=uint8) ```
-  - Output data: ``` ClassLabel(shape=(), dtype=int64, num_classes=102) ```
+  - Input data: `Image(shape=(None,None,3), dtype=uint8)`
+  - Output data: `ClassLabel(shape=(), dtype=int64, num_classes=102)`
 - **Metrics:**
+
   - Loss: a measure of how well the model's predictions match the true labels during training or validation. Lower loss indicates better fit.
   - Accuracy: the proportion of correctly classified samples among all samples.
   - F1-score: the harmonic mean of precision and recall, balancing the trade-off between FP and FN.
@@ -29,15 +30,16 @@ This project focuses on classifying plants based on their photographs. It uses t
 
 - **Data:**
   The dataset consists of 102 flower categories, wide-spread in the UK. Every class contains 40-258 images. Training set, validation set : 10 images for each set, test set: 6149 images (at least 20 images for each class).
+
   - **Specifics:**
     - Images within one class may differ from each other very much
     - Images from different classes may be very similar to each other
     - A lot of classes (102)
   - **Challenges:**
-    - Small training set (10 images per class for training and validation).  
-    - High variability within classes.  
+    - Small training set (10 images per class for training and validation).
+    - High variability within classes.
     - No additional metadata available.
-  
+
   Link: [https://huggingface.co/datasets/nkirschi/oxford-flowers]
 
 ### Model
@@ -56,7 +58,9 @@ Link: [https://docs.pytorch.org/vision/main/models/generated/torchvision.models.
 - Poetry for dependency management
 
 ### Installation
+
 0. Install pyenv if missing, install Python 3.12.3, install poetry if missing:
+
 ```
 command -v pyenv >/dev/null 2>&1 || (curl https://pyenv.run | bash && export PATH="$HOME/.pyenv/bin:$PATH" && eval "$(pyenv init --path)" && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"); \
 export PATH="$HOME/.pyenv/bin:$PATH"; eval "$(pyenv init --path)"; eval "$(pyenv init -)"; eval "$(pyenv virtualenv-init -)"; \
@@ -66,17 +70,20 @@ export PATH="$HOME/.local/bin:$PATH"; \
 ```
 
 1. Clone the repository:
+
 ```
 git clone https://github.com/cotucotudu/oxford-flowers-classification
 cd oxford-flowers-classification
 ```
 
 2. Install dependencies using Poetry:
+
 ```
 poetry install
 ```
 
 3. Activate Poetry virtual environment:
+
 ```
 poetry env activate
 ```
@@ -88,30 +95,39 @@ poetry env activate
 The `data.py` script manages dataset downloading, preprocessing, and splitting. It downloads the Oxford Flowers 102 dataset, organizes images into folders, and prepares train, validation, and test splits.
 
 To run data preparation:
+
 ```
 poetry run python plants_classification/data.py data.batch_size=64 data.resize=300
 
 ```
+
 ### Example Output
+
 ```
 Data successfully downloaded and saved to 'data/raw'.
 Train dataset size: 1020
 Validation dataset size: 1020
 Test dataset size: 6149
 ```
+
 ---
+
 ## Train
 
 0. If the mlflow server is not running yet, launch it:
+
 ```
 poetry run mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 8080
 ```
 
 1. To start training the model, run:
+
 ```
 poetry run python plants_classification/train.py data.batch_size=64 model.learning_rate=0.0005 training.max_epochs=30
 ```
+
 Adjustable parameters:
+
 ```
 data:
   data_dir: "../data"
@@ -127,29 +143,33 @@ model:
 
 training:
   max_epochs: 50
-  accelerator: "auto" 
+  accelerator: "auto"
   devices: 1
   checkpoint_dir: "checkpoints"
 
 logging:
   experiment_name: "flower_classification"
-  mlflow_tracking_uri: "http://127.0.0.1:8080" 
+  mlflow_tracking_uri: "http://127.0.0.1:8080"
   plots_dir: "../plots"
 ```
+
 The training process automatically saves checkpoints and logs metrics
 
 ---
+
 ## Inference
 
 To run inference on new images, use:
+
 ```
-poetry run python plants_classification/infer.py 'infer.model.checkpoint_path="checkpoints/best-epoch=1.ckpt"' 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"' 
+poetry run python plants_classification/infer.py 'infer.model.checkpoint_path="checkpoints/best-epoch=1.ckpt"' 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"'
 ```
 
 - Input data format: path to a JPG image.
 - Output: top-5 predicted classes with probabilities.
 
 #### Adjustable parameters:
+
 ```
 infer:
   model:
@@ -163,8 +183,8 @@ infer:
     std: [0.229, 0.224, 0.225]
 ```
 
-
 ### Example Output
+
 ```
 Top-5 preds for ../data/flowers-102/jpg/image_00001.jpg:
 Class 76: probability 0.0996
@@ -174,10 +194,8 @@ Class 40: probability 0.0259
 Class 48: probability 0.0256
 ```
 
-
 ---
 
 ## Contact and Support
 
 If you have any questions or suggestions, please open an issue in the repository or contact me directly
-
