@@ -81,7 +81,7 @@ The `data.py` script manages dataset downloading, preprocessing, and splitting. 
 
 To run data preparation:
 ```
-poetry run python data.py data.batch_size=64 data.resize=300
+poetry run python plants_classification/data.py data.batch_size=64 data.resize=300
 
 ```
 ### Example Output
@@ -96,7 +96,7 @@ Test dataset size: 6149
 
 To start training the model, run:
 ```
-poetry run python train.py data.batch_size=64 model.learning_rate=0.0005 training.max_epochs=30
+poetry run python plants_classification/train.py data.batch_size=64 model.learning_rate=0.0005 training.max_epochs=30
 ```
 - You can adjust parameters like batch size, learning rate, and number of epochs via CLI arguments.
 - The training process automatically saves checkpoints and logs metrics.
@@ -106,7 +106,7 @@ poetry run python train.py data.batch_size=64 model.learning_rate=0.0005 trainin
 
 To run inference on new images, use:
 ```
-poetry run python infer.py 'infer.model.checkpoint_path="checkpoints/flower-resnet50-epoch=05-val_loss=2.49.ckpt"' 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"'
+poetry run python plants_classification/infer.py 'infer.model.checkpoint_path="checkpoints/flower-resnet50-epoch=05-val_loss=2.49.ckpt"' 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"'
 ```
 
 - Input data format: path to a JPG image.
