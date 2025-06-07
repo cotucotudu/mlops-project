@@ -1,7 +1,0 @@
-data:
-  raw_dir: data/raw
-  processed_dir: data/processed
-  batch_size: 64
-  num_workers: 4
-  resize: 300
-  crop_size: 224

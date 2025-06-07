@@ -1,2 +1,0 @@
-- infer.model.checkpoint_path="checkpoints/flower-resnet50-epoch=05-val_loss=2.49.ckpt"
-- infer.image_path="../data/flowers-102/jpg/image_00001.jpg"
