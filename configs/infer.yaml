@@ -1,6 +1,6 @@
 infer:
   model:
-    checkpoint_path: "outputs/models/flower-resnet50-epoch=01-val_loss=0.50.ckpt"
+    checkpoint_path: "outputs/models/best-epoch=01.ckpt"
   image_path: "test_image.jpg"
   top_k: 5
   preprocess:
