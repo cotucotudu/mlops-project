@@ -1,7 +1,7 @@
 infer:
   model:
-    checkpoint_path: "outputs/models/best-epoch=01.ckpt"
-  image_path: "test_image.jpg"
+    checkpoint_path: "checkpoints/best-epoch=1.ckpt"
+  image_path: "../data/flowers-102/jpg/image_00001.jpg"
   top_k: 5
   preprocess:
     resize: 256
