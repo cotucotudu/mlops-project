@@ -279,7 +279,7 @@ def main(cfg: DictConfig):
     checkpoint_cb = ModelCheckpoint(
         dirpath=cfg.training.checkpoint_dir,
         monitor="val_loss",
-        filename="best-{epoch}-{val_loss:.2f}",
+        filename="best-{epoch}",
     )
 
     early_stop_cb = EarlyStopping(monitor="val_loss", patience=5, mode="min")
