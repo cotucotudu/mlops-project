@@ -54,12 +54,12 @@ Link: [https://docs.pytorch.org/vision/main/models/generated/torchvision.models.
 
 ### Requirements
 
-- Python 3.12.3
+- Python 3.12
 - Poetry for dependency management
 
 ### Installation
 
-0. Install pyenv if missing, install Python 3.12.3, install poetry if missing:
+0. Install pyenv if missing, install Python 3.12, install poetry if missing:
 
 ```
 command -v pyenv >/dev/null 2>&1 || (curl https://pyenv.run | bash && export PATH="$HOME/.pyenv/bin:$PATH" && eval "$(pyenv init --path)" && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"); \
@@ -82,7 +82,7 @@ cd oxford-flowers-classification
 poetry install
 ```
 
-3. Activate Poetry virtual environment:
+3. Activate Poetry virtual environment (optional):
 
 ```
 poetry env activate
