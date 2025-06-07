@@ -52,7 +52,7 @@ Link: [https://docs.pytorch.org/vision/main/models/generated/torchvision.models.
 
 ### Requirements
 
-- Python 3.12
+- Python 3.12.3
 - Poetry for dependency management
 
 ### Installation
