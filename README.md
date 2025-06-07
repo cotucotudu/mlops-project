@@ -162,7 +162,7 @@ logging:
 To run inference on new images, use:
 
 ```
-poetry run python plants_classification/infer.py 'infer.model.checkpoint_path="checkpoints/best-epoch=1.ckpt"' 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"'
+poetry run python plants_classification/infer.py 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"'
 ```
 
 - Input data format: path to a JPG image.
