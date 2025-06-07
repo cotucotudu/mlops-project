@@ -102,12 +102,41 @@ Test dataset size: 6149
 ---
 ## Train
 
-To start training the model, run:
+0. If the mlflow server is not running yet, launch it:
+```
+poetry run mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 8080
+```
+
+1. To start training the model, run:
 ```
 poetry run python plants_classification/train.py data.batch_size=64 model.learning_rate=0.0005 training.max_epochs=30
 ```
-- You can adjust parameters like batch size, learning rate, and number of epochs via CLI arguments.
-- The training process automatically saves checkpoints and logs metrics.
+Adjustable parameters:
+```
+data:
+  data_dir: "../data"
+  batch_size: 32
+  num_workers: 4
+  resize: 256
+  crop_size: 224
+
+model:
+  num_classes: 102
+  learning_rate: 0.001
+  freeze_backbone: true
+
+training:
+  max_epochs: 50
+  accelerator: "auto" 
+  devices: 1
+  checkpoint_dir: "checkpoints"
+
+logging:
+  experiment_name: "flower_classification"
+  mlflow_tracking_uri: "http://127.0.0.1:8080" 
+  plots_dir: "../plots"
+```
+The training process automatically saves checkpoints and logs metrics
 
 ---
 ## Inference
