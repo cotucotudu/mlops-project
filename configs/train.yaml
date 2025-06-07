@@ -18,5 +18,5 @@ training:
 
 logging:
   experiment_name: "flower_classification"
-  mlflow_tracking_uri: "http://127.0.0.1:8080" # Адрес MLflow сервера
+  mlflow_tracking_uri: "http://127.0.0.1:8080"
   plots_dir: "../plots"
