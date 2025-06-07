@@ -5,4 +5,3 @@ model:
   checkpoint_path: "checkpoints/best-epoch=1.ckpt"
   img_size: 300
   onnx_output: "model.onnx"
-

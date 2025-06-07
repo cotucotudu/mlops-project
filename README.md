@@ -99,7 +99,9 @@ To run data preparation:
 ```
 poetry run python plants_classification/data.py data.batch_size=64 data.resize=300
 ```
+
 ### Adjustable Parameters (Hydra):
+
 ```
 data:
   raw_dir: data/raw
@@ -152,6 +154,7 @@ logging:
   mlflow_tracking_uri: "http://127.0.0.1:8080"
   plots_dir: "../plots"
 ```
+
 ---
 
 ## Inference
@@ -192,12 +195,17 @@ Class 48: probability 0.0256
 ```
 
 ---
+
 ## Export to ONNX
+
 To export your trained model to ONNX, use:
+
 ```
 poetry run python plants_classification/export_onnx.py model.learning_rate=0.01 model.freeze_backbone=false
 ```
+
 ### Adjustable parameters (Hydra):
+
 ```
 export:
   model:
@@ -208,6 +216,7 @@ export:
     freeze_backbone: true
     num_classes: 102
 ```
+
 ---
 
 ## Contact and Support
