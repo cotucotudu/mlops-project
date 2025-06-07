@@ -143,7 +143,7 @@ The training process automatically saves checkpoints and logs metrics
 
 To run inference on new images, use:
 ```
-poetry run python plants_classification/infer.py 'infer.model.checkpoint_path="checkpoints/flower-resnet50-epoch=05-val_loss=2.49.ckpt"' 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"'
+poetry run python plants_classification/infer.py 'infer.model.checkpoint_path="checkpoints/best-epoch=02.ckpt"' 'infer.image_path="../data/flowers-102/jpg/image_00001.jpg"'
 ```
 
 - Input data format: path to a JPG image.
