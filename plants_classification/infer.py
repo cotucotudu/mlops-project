@@ -28,24 +28,19 @@ def main(cfg: DictConfig):
         ]
     )
 
-    # Загрузка и предобработка изображения
+    # Loading and preprocessing the image
     img = Image.open(cfg.infer.image_path).convert("RGB")
     input_tensor = preprocess(img).unsqueeze(0)  # Добавляем batch dimension
 
-    # Перемещение на устройство (CPU или GPU)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     input_tensor = input_tensor.to(device)
 
-    # Инференс
-    with torch.no_grad():
+    with torch.no_grad(): #INference
         logits = model(input_tensor)
         probs = torch.nn.functional.softmax(logits, dim=1)
 
-    # Получаем топ-k предсказаний
-    top_probs, top_idxs = probs.topk(cfg.infer.top_k)
-
-    # Вывод результатов
+    top_probs, top_idxs = probs.topk(cfg.infer.top_k) #top-k preds
     print(f"Top-{cfg.infer.top_k} preds for {cfg.infer.image_path}: ")
     for prob, idx in zip(top_probs[0], top_idxs[0]):
         print(f"Class {idx.item()}: probability {prob.item(): .4f}")
