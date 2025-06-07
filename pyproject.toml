@@ -3,10 +3,10 @@ name = "plants_classification"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "karpukhina-dr",email = "70887107+karpukhina-dr@users.noreply.github.com"}
+    {name = "karpukhina-dr",email = "karpukhina.dr@phystech.edu"}
 ]
 readme = "README.md"
-requires-python = "^3.12"
+requires-python = "3.12.3"
 dependencies = [
     "torch (>=2.2.2, <2.3)",
     "torchvision (>=0.17.2,<0.18.0)",
@@ -24,7 +24,7 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "3.12.3"
 torch = "*"
 torchvision = "*"
 torchaudio = "*"
