@@ -68,9 +68,9 @@ cd oxford-flowers-classification
 poetry install
 ```
 
-3. (Optional) Activate Poetry virtual environment:
+3. Activate Poetry virtual environment:
 ```
-poetry shell
+poetry env activate
 ```
 
 ---
