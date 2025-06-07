@@ -92,22 +92,22 @@ poetry env activate
 
 ## Data Preparation
 
-The `data.py` script manages dataset downloading, preprocessing, and splitting. It downloads the Oxford Flowers 102 dataset, organizes images into folders, and prepares train, validation, and test splits.
+The `data.py` script downloads the Oxford Flowers 102 dataset, organizes images into folders, and prepares train, validation, and test splits.
 
 To run data preparation:
 
 ```
 poetry run python plants_classification/data.py data.batch_size=64 data.resize=300
-
 ```
-
-### Example Output
-
+### Adjustable Parameters (Hydra):
 ```
-Data successfully downloaded and saved to 'data/raw'.
-Train dataset size: 1020
-Validation dataset size: 1020
-Test dataset size: 6149
+data:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  batch_size: 32
+  num_workers: 4
+  resize: 256
+  crop_size: 224
 ```
 
 ---
@@ -126,7 +126,7 @@ poetry run mlflow server --backend-store-uri sqlite:///mlflow.db --default-artif
 poetry run python plants_classification/train.py data.batch_size=64 model.learning_rate=0.0005 training.max_epochs=30
 ```
 
-Adjustable parameters:
+### Adjustable parameters (Hydra):
 
 ```
 data:
@@ -152,9 +152,6 @@ logging:
   mlflow_tracking_uri: "http://127.0.0.1:8080"
   plots_dir: "../plots"
 ```
-
-The training process automatically saves checkpoints and logs metrics
-
 ---
 
 ## Inference
@@ -168,7 +165,7 @@ poetry run python plants_classification/infer.py 'infer.model.checkpoint_path="c
 - Input data format: path to a JPG image.
 - Output: top-5 predicted classes with probabilities.
 
-#### Adjustable parameters:
+### Adjustable parameters (Hydra):
 
 ```
 infer:
@@ -194,6 +191,23 @@ Class 40: probability 0.0259
 Class 48: probability 0.0256
 ```
 
+---
+## Export to ONNX
+To export your trained model to ONNX, use:
+```
+poetry run python plants_classification/export_onnx.py model.learning_rate=0.01 model.freeze_backbone=false
+```
+### Adjustable parameters (Hydra):
+```
+export:
+  model:
+    checkpoint_path: "checkpoints/best-epoch=1.ckpt"
+    onnx_output: "model.onnx"
+    img_size: 300
+    learning_rate: 0.0005
+    freeze_backbone: true
+    num_classes: 102
+```
 ---
 
 ## Contact and Support
